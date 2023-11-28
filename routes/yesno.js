@@ -1,14 +1,18 @@
-var express = require('express');
-var router = express.Router();
-const request = require('request');
+import https from "https";
 
-router.get('/', async (req, res) => {
-request('https://yesno.wtf/assets/yes/10-271c872c91cd72c1e38e72d2f8eda676.gif', function (error, response, body) {
-if (!error && response.statusCode == 200) {
-const data = JSON.parse(body);
-res.json(data);
-}
-});
+const url = "https://yesno.wtf/assets/yes/10-271c872c91cd72c1e38e72d2f8eda676.gif";
+
+https.get(url, (res) => {
+    let body = '';
+  
+    res.on("data", function (d) {
+      body += d;
+    });
+    
+    res.on('end', function () {
+      console.log(body);
+    })
 })
-
-module.exports = router;
+.on("error", (e) => {
+    console.error(e);
+});
